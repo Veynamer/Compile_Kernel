@@ -44,7 +44,7 @@ jobs:
       run: |
         cd ${{ github.workspace }}/Anykernel
         ls
-        zip -o Kernel_template.zip
+        unzip -o Kernel_template.zip
         ls
         zip -q -r output.zip ${{ github.workspace }}/Anykernel/Kernel_template
         ls
