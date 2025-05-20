@@ -1,4 +1,4 @@
-KERNEL_SOURCE=https://github.com/realme-kernel-opensource/realme_C31_C33_C35_narzo50A-Prime-AndroidT-NEW-kernel-source
+KERNEL_SOURCE=https://github.com/Veynamer/realme_C31_C33_C35_narzo50A-Prime-AndroidT-NEW-kernel-source
 KERNEL_SOURCE_BRANCH=master
 KERNEL_CONFIG=unisoc_fuzz_ums512_defconfig
 KERNEL_IMAGE_NAME=Kernel
