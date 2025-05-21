@@ -1,4 +1,4 @@
-name:  BUILD KERNEL ANDROID 12-5.4 Unisoc UMS512 fuzz
+name:  BUILD KERNEL5.4 Unisoc UMS512
 on:
   workflow_dispatch:
     inputs:
@@ -12,7 +12,7 @@ jobs:
   build:
     permissions:
       contents: write
-    name: BUILD ANDROID12-5.4
+    name: BUILD KERNEL5.4 UNISOC UMS512
     runs-on: ubuntu-24.04
     if: github.event.repository.owner.id == github.event.sender.id
     env:
