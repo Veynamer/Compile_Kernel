@@ -1,7 +1,7 @@
-KERNEL_SOURCE=https://github.com/Veynamer/realme_C31_C33_C35_narzo50A-Prime-AndroidT-NEW-kernel-source
+KERNEL_SOURCE=https://github.com/Veynamer/s19mps-kernel
 KERNEL_SOURCE_BRANCH=master
-KERNEL_CONFIG=unisoc_fuzz_ums512_defconfig
-KERNEL_IMAGE_NAME=Kernel
+KERNEL_CONFIG=ums512_test_defconfig
+KERNEL_IMAGE_NAME=Image
 ARCH=arm64
 
 ENABLE_CLANG=true
