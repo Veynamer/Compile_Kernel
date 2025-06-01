@@ -1,8 +1,10 @@
-KERNEL_SOURCE=https://github.com/Veynamer/android_kernel_zte_ums9620_mifi_u30air
+KERNEL_SOURCE=https://github.com/Veynamer/android_kernel5.4_sprd
 KERNEL_SOURCE_BRANCH=main
 KERNEL_CONFIG=ums512_test_defconfig
 KERNEL_IMAGE_NAME=Image
 ARCH=arm64
+BSP_BUILD_ANDROID_OS="y"
+BSP_BUILD_FAMILY="sharkl5pro"
 
 ENABLE_CLANG=true
 USE_AOSP_CLANG=true
@@ -38,7 +40,7 @@ KSU_EXPECTED_HASH=
 BUILD_KERNELSU_BOOT_IMG=false
 KERNELSU_SOURCE_BOOT_IMAGE=
 
-DISABLE-LTO=true
+DISABLE-LTO=false
 DISABLE_CC_WERROR=false
 ADD_KPROBES_CONFIG=false
 ADD_OVERLAYFS_CONFIG=false
