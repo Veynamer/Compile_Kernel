@@ -1,5 +1,5 @@
-KERNEL_SOURCE=https://github.com/Veynamer/android_kernel5.4_sprd
-KERNEL_SOURCE_BRANCH=main
+KERNEL_SOURCE=https://github.com/Veynamer/android_kernel_unisoc_ums512
+KERNEL_SOURCE_BRANCH=Dev-infinix-x6816d
 KERNEL_CONFIG=ums512_test_defconfig
 KERNEL_IMAGE_NAME=Image
 ARCH=arm64
