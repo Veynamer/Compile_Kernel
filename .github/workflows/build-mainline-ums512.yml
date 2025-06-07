@@ -1,0 +1,66 @@
+name: "Compile kernel mainline UMS512"
+
+on:
+  workflow_dispatch:
+    inputs:
+      AUTHOR:
+        description: 'AUTHOR'
+        required: true
+        default: 'Veynamer'   
+      CHECKOUT_REPO:
+        description: 'CHECKOUT_REPO'
+        required: true
+        default: 'linux-ums512'
+      CHECKOUT_BRANCH:
+        description: 'CHECKOUT_BRANCH'
+        required: true
+        default: 'ums512-no-uboot_2nd'
+      USEDEFCONFIG:
+        description: 'USEDEFCONFIG'
+        required: true
+        default: 'ums512_defconfig'
+
+env:
+  KERNEL_DIR: 'kernel_source'
+
+jobs:
+  kernel:
+    name: Compile kernel
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check out the repository
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ github.event.inputs.AUTHOR }}/${{ github.event.inputs.CHECKOUT_REPO }}
+        ref: ${{ github.event.inputs.CHECKOUT_BRANCH }}
+        path: ${{ env.KERNEL_DIR }}
+
+    - name: Prepare the compilation environment
+      run: |
+        sudo apt update -y
+        sudo apt install -y bc binutils bison dwarves flex gcc-aarch64-linux-gnu git make openssl pahole perl-base libssl-dev libelf-dev
+
+    - name: Compiling
+      run: |
+        cd ${{ github.workspace }}/${{ env.KERNEL_DIR}}
+        export ARCH=arm64
+        export CROSS_COMPILE=aarch64-linux-gnu-
+
+        make O=out ${{ github.event.inputs.USEDEFCONFIG }}
+
+        make -j $(nproc --all) O=out Image dtbs
+        
+    - name: Packaged kernel
+      run: |
+        cd ${{ github.workspace }}
+        zip mainline_ums512.zip ${{ github.workspace }}/${{ env.KERNEL_DIR}}/out/arch/arm64/boot/Image ${{ github.workspace }}/${{ env.KERNEL_DIR}}/out/arch/arm64/boot/dtb/*
+        mkdir kernel_public
+        cp mainline_ums512.zip kernel_public/mainline_ums512.zip
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4.3.1
+      with:
+        name: kernel_mainline_ums512
+        path: ${{ github.workspace }}/mainline_ums512.zip
+        if-no-files-found: error
