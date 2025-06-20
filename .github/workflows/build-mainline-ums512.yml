@@ -54,7 +54,7 @@ jobs:
     - name: Packaged kernel
       run: |
         cd ${{ github.workspace }}
-        zip mainline_ums512.zip ${{ github.workspace }}/${{ env.KERNEL_DIR}}/out/arch/arm64/boot/Image ${{ github.workspace }}/${{ env.KERNEL_DIR}}/out/arch/arm64/boot/dtb/*
+        zip mainline_ums512.zip ${{ github.workspace }}/${{ env.KERNEL_DIR}}/out/arch/arm64/boot/Image ${{ github.workspace }}/${{ env.KERNEL_DIR}}/out/arch/arm64/boot/dts/sprd/*.dtb
         mkdir kernel_public
         cp mainline_ums512.zip kernel_public/mainline_ums512.zip
     
