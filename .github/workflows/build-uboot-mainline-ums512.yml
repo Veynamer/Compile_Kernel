@@ -1,0 +1,65 @@
+name: "Compile U-Boot mainline UMS512"
+
+on:
+  workflow_dispatch:
+    inputs:
+      AUTHOR:
+        description: 'AUTHOR'
+        required: true
+        default: 'Veynamer'   
+      CHECKOUT_REPO:
+        description: 'CHECKOUT_REPO'
+        required: true
+        default: 'u-boot'
+      CHECKOUT_BRANCH:
+        description: 'CHECKOUT_BRANCH'
+        required: true
+        default: 'ums512'
+      USEDEFCONFIG:
+        description: 'USEDEFCONFIG'
+        required: true
+        default: 'infinix-x6816d_defconfig'
+
+env:
+  UBOOT_DIR: 'uboot_source'
+
+jobs:
+  kernel:
+    name: Compile kernel
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check out the repository
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ github.event.inputs.AUTHOR }}/${{ github.event.inputs.CHECKOUT_REPO }}
+        ref: ${{ github.event.inputs.CHECKOUT_BRANCH }}
+        path: ${{ env.UBOOT_DIR }}
+
+    - name: Prepare the compilation environment
+      run: |
+        sudo apt update -y
+        sudo apt install -y bc binutils bison dwarves flex gcc-aarch64-linux-gnu git make openssl pahole perl-base libssl-dev libelf-dev
+
+    - name: Compiling
+      run: |
+        cd ${{ github.workspace }}/${{ env.UBOOT_DIR}}
+        export CROSS_COMPILE=aarch64-linux-gnu-
+
+		make O=_out ARCH=arm ${{ github.event.inputs.USEDEFCONFIG }}
+		make O=_out ARCH=arm -j $(nproc --all)
+
+        
+    - name: Packaged U-Boot
+      run: |
+        cd ${{ github.workspace }}
+        zip uboot_ums512.zip ${{ github.workspace }}/${{ env.UBOOT_DIR}}/_out/u-boot.bin
+        mkdir uboot_public
+        cp uboot_ums512.zip uboot_public/uboot_ums512.zip
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4.3.1
+      with:
+        name: uboot_ums512
+        path: ${{ github.workspace }}/uboot_ums512.zip
+        if-no-files-found: error
