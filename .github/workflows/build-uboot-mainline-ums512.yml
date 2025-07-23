@@ -46,8 +46,8 @@ jobs:
         cd ${{ github.workspace }}/${{ env.UBOOT_DIR}}
         export CROSS_COMPILE=aarch64-linux-gnu-
 
-		make O=_out ARCH=arm ${{ github.event.inputs.USEDEFCONFIG }}
-		make O=_out ARCH=arm -j $(nproc --all)
+        make O=_out ARCH=arm ${{ github.event.inputs.USEDEFCONFIG }}
+        make O=_out ARCH=arm -j $(nproc --all)
 
         
     - name: Packaged U-Boot
