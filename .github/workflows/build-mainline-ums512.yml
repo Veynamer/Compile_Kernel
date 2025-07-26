@@ -14,7 +14,7 @@ on:
       CHECKOUT_BRANCH:
         description: 'CHECKOUT_BRANCH'
         required: true
-        default: 'ums512-no-uboot_2nd'
+        default: 'ums512-test-spi/6.15'
       USEDEFCONFIG:
         description: 'USEDEFCONFIG'
         required: true
