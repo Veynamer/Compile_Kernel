@@ -10,11 +10,11 @@ on:
       CHECKOUT_REPO:
         description: 'CHECKOUT_REPO'
         required: true
-        default: 'linux-ums512'
+        default: 'mainline-unisoc'
       CHECKOUT_BRANCH:
         description: 'CHECKOUT_BRANCH'
         required: true
-        default: 'ums512-test-spi/6.15'
+        default: 'ums512'
       USEDEFCONFIG:
         description: 'USEDEFCONFIG'
         required: true
