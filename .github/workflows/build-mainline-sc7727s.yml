@@ -1,0 +1,66 @@
+name: "Compile kernel mainline SC7727S"
+
+on:
+  workflow_dispatch:
+    inputs:
+      AUTHOR:
+        description: 'AUTHOR'
+        required: true
+        default: 'Veynamer'   
+      CHECKOUT_REPO:
+        description: 'CHECKOUT_REPO'
+        required: true
+        default: 'mainline-unisoc'
+      CHECKOUT_BRANCH:
+        description: 'CHECKOUT_BRANCH'
+        required: true
+        default: 'sc7727s'
+      USEDEFCONFIG:
+        description: 'USEDEFCONFIG'
+        required: true
+        default: 'unisoc_defconfig'
+
+env:
+  KERNEL_DIR: 'kernel_source'
+
+jobs:
+  kernel:
+    name: Compile kernel
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check out the repository
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ github.event.inputs.AUTHOR }}/${{ github.event.inputs.CHECKOUT_REPO }}
+        ref: ${{ github.event.inputs.CHECKOUT_BRANCH }}
+        path: ${{ env.KERNEL_DIR }}
+
+    - name: Prepare the compilation environment
+      run: |
+        sudo apt update -y
+        sudo apt install -y bc binutils bison dwarves flex gcc-arm-linux-gnueabi git make openssl pahole perl-base libssl-dev libelf-dev
+
+    - name: Compiling
+      run: |
+        cd ${{ github.workspace }}/${{ env.KERNEL_DIR}}
+        export ARCH=arm
+        export CROSS_COMPILE=arm-linux-gnueabi-
+
+        make O=out ${{ github.event.inputs.USEDEFCONFIG }}
+
+        make -j $(nproc --all) O=out zImage dtbs
+        
+    - name: Packaged kernel
+      run: |
+        cd ${{ github.workspace }}
+        zip mainline_sc7727s.zip ${{ github.workspace }}/${{ env.KERNEL_DIR}}/out/arch/arm/boot/zImage ${{ github.workspace }}/${{ env.KERNEL_DIR}}/out/arch/arm/boot/dts/unisoc/*.dtb
+        mkdir kernel_public
+        cp mainline_sc7727s.zip kernel_public/mainline_sc7727s.zip
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4.3.1
+      with:
+        name: kernel_mainline_sc7727s
+        path: ${{ github.workspace }}/mainline_sc7727s.zip
+        if-no-files-found: error
